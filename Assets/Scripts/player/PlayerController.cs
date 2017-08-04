@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
+    public GameObject scrollPrefab;
+
     // Constants
     public float speed = 4f;
-    public float rollSpeed = 5f;
     public float jumpSpeed = 9f;
+    public float holdJumpAmount = 0.5f;
     public float gravity = -20f;
     public float groundStep = 0.03f;
     public float skinStep = 0.005f;
@@ -15,6 +18,7 @@ public class PlayerController : MonoBehaviour {
     // Publicly accessible controls
     public Vector3 dir { get; set; }
     public bool jumped { get; set; }
+    public bool holdJump { get; set; }
 
     // Internally controlled status variables
     public bool onGround { get; private set; }
@@ -35,6 +39,12 @@ public class PlayerController : MonoBehaviour {
         jumped = false;
         onGround = false;
         grabbing = false;
+
+        GameObject scroll = Instantiate(scrollPrefab);
+        scroll.GetComponent<Textbox>().SetText(new List<string>(new string [] {
+            "It was raining,\nand I was alone.",
+            "I decided to get up."
+        }));
     }
 
     void FixedUpdate() {
@@ -50,6 +60,9 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (!onGround && !grabbing) {
+            if (holdJump) {
+                yspeed += holdJumpAmount;
+            }
             yspeed += gravity * dt;
         }
 

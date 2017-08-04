@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: dc4272de031e77d4c98411cd6c51f13f
+timeCreated: 1501841094
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Nailsandteeth
+  fontNames:
+  - Nailsandteeth
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

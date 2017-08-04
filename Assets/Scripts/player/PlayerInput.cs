@@ -32,5 +32,10 @@ public class PlayerInput : MonoBehaviour {
                 controller.jumped = true;
             }
         }
+        if (Input.GetKey(KeyCode.Z) && !controller.onGround) {
+            controller.holdJump = true;
+        } else {
+            controller.holdJump = false;
+        }
     }
 }
