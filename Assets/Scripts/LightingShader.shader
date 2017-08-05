@@ -58,9 +58,8 @@ Shader "Custom/Light" {
 				float4 col = tex2D(_MainTex, vin.uv);
 				col.rgb *= _Color.rgb * vin.color.rgb * _Color.a;
 				col.rgb *= vin.intensity;
-				//col.rgb *=  vin.color.a;
 				col *= _Contrast;
-				//return float4(vin.intensity, vin.intensity, vin.intensity, vin.intensity);
+				col.a = _Color.a * col.a * vin.color.a;
 				return col;
 			}
 
@@ -113,12 +112,13 @@ Shader "Custom/Light" {
 				float4 col = tex2D(_MainTex, vin.uv);
 				col.rgb *= _Color.rgb * vin.color.rgb * _Color.a;
 				col.rgb *= vin.color.a;
-				col.a = _Color.a * vin.color.a;
 				col *= _Colorise;
 				float4 part_col = tex2D(_PartTex, vin.uv_part);
 				part_col.rgb *= vin.color.rgb * vin.color.a;
 
-				return col + part_col * _PartBlend;
+				float4 final_col = col + part_col * _PartBlend;
+				final_col.a *= col.a * vin.color.a;
+				return final_col;
 			}
 			ENDCG
 		}

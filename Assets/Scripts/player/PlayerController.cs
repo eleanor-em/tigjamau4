@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public GameObject scrollPrefab;
-
     // Constants
     public float speed = 4f;
     public float jumpSpeed = 9f;
@@ -13,7 +11,6 @@ public class PlayerController : MonoBehaviour {
     public float groundStep = 0.03f;
     public float skinStep = 0.005f;
     public float slopeStep = 0.3f;
-    public float grabStep = 0.3f;
 
     // Publicly accessible controls
     public Vector3 dir { get; set; }
@@ -22,9 +19,11 @@ public class PlayerController : MonoBehaviour {
 
     // Internally controlled status variables
     public bool onGround { get; private set; }
-    public bool grabbing { get; private set; }
     private float yspeed = 0;
     private Vector3 prevPos;
+
+    private int horizScanCount = 10;
+    private int vertScanCount = 5;
 
     public Bounds bounds { get; private set; }
     public Vector3 extents { get; private set; }
@@ -38,33 +37,17 @@ public class PlayerController : MonoBehaviour {
         dir = Vector3.zero;
         jumped = false;
         onGround = false;
-        grabbing = false;
-
-        GameObject scroll = Instantiate(scrollPrefab);
-        scroll.GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
-            new TextInfo {
-                text = "I am alone",
-                fadeInTime = 10,
-                lifetime = 3,
-                fadeOutTime = 1,
-                color = Color.white
-            }
-        }));
     }
 
     void FixedUpdate() {
         float dt = Time.fixedDeltaTime;
 
         if (jumped) {
-            if (grabbing) {
-                transform.position = prevPos;
-            }
-            grabbing = false;
             yspeed = jumpSpeed;
             onGround = false;
         }
 
-        if (!onGround && !grabbing) {
+        if (!onGround) {
             if (holdJump) {
                 yspeed += holdJumpAmount;
             }
@@ -80,20 +63,12 @@ public class PlayerController : MonoBehaviour {
         }
 
         distance = xDelta.magnitude + extents.x;
-        if (!grabbing && dir != Vector3.zero && !RaycastHorizRange(xDelta, distance, hit => {
+        if (dir != Vector3.zero && !RaycastHorizRange(xDelta, distance, hit => {
             // If we wouldn't have hit from slightly up, then we might have stepped up a slope
             if (!RaycastHorizRange(Vector3.up * slopeStep, xDelta, distance)) {
                 // To handle this, we move across, then resolve a vertical collision. Yay!
                 transform.position += xDelta;
                 CheckOnGround(MoveToContactY);
-            } else if (!RaycastHorizRange(Vector3.up * (bounds.size.y - extents.y + grabStep), xDelta, distance)) {
-                if (hit.collider.CompareTag("Platform")) {
-                    // TODO: Find a better way to classify what constitutes an "edge".
-                    prevPos = transform.position;
-                    transform.position = hit.point;
-                    grabbing = true;
-                    yspeed = 0;
-                }
             } else {
                 MoveToContactX(hit);
             }
@@ -106,14 +81,16 @@ public class PlayerController : MonoBehaviour {
                 });
             }
         }
-
-        if (!grabbing) {
-            if (!CheckOnGround()) {
-                onGround = false;
-            } else if (yspeed <= 0) {
-                yspeed = 0;
-                onGround = true;
+        if (!CheckOnGround(hit => {
+            // check if we're on a moving platform
+            if (hit.collider.CompareTag("Platform")) {
+                transform.position += hit.collider.GetComponent<MovingPlatformController>().delta;
             }
+        })) {
+            onGround = false;
+        } else if (yspeed <= 0) {
+            yspeed = 0;
+            onGround = true;
         }
 
         jumped = false;
@@ -147,17 +124,17 @@ public class PlayerController : MonoBehaviour {
         return RaycastVertRange(Vector3.zero, direction, distance, callback);
     }
     private bool RaycastVertRange(Vector3 offset, Vector2 direction, float distance, Action<RaycastHit2D> callback) {
-        return RaycastRange(offset + Vector3.left * extents.x, offset + Vector3.right * extents.x, 5, direction, distance, callback);
+        return RaycastRange(offset + Vector3.left * extents.x, offset + Vector3.right * extents.x, vertScanCount, direction, distance, callback);
     }
 
     private bool RaycastHorizRange(Vector2 direction, float distance, Action<RaycastHit2D> callback) {
         return RaycastHorizRange(Vector3.zero, direction, distance, callback);
     }
     private bool RaycastHorizRange(Vector3 offset, Vector2 direction, float distance) {
-        return RaycastRange(offset + Vector3.up * (bounds.size.y - extents.y), offset + Vector3.down * extents.y, 10, direction, distance, hit => { });
+        return RaycastRange(offset + Vector3.up * (bounds.size.y - extents.y), offset + Vector3.down * extents.y, horizScanCount, direction, distance, hit => { });
     }
     private bool RaycastHorizRange(Vector3 offset, Vector2 direction, float distance, Action<RaycastHit2D> callback) {
-        return RaycastRange(offset + Vector3.up * (bounds.size.y - extents.y), offset + Vector3.down * extents.y, 10, direction, distance, callback);
+        return RaycastRange(offset + Vector3.up * (bounds.size.y - extents.y), offset + Vector3.down * extents.y, horizScanCount, direction, distance, callback);
     }
 
     private bool RaycastRange(Vector3 startOffset, Vector3 endOffset, int count, Vector2 direction, float distance, Action<RaycastHit2D> callback) {
