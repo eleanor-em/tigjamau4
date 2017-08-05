@@ -61,7 +61,6 @@ public class PlayerController : MonoBehaviour {
 
         var distance = yDelta.magnitude + (yspeed > 0 ? bounds.size.y - extents.y : extents.y);
         if (yspeed != 0 && !RaycastVertRange(yDelta, distance, MoveToContactY)) {
-            Debug.Log("moving " + yDelta);
             transform.position += yDelta;
         }
 
@@ -92,7 +91,12 @@ public class PlayerController : MonoBehaviour {
         })) {
             onGround = false;
         } else if (yspeed <= 0) {
+            animator.ResetTrigger("OnJump");
             animator.SetTrigger("StopJump");
+            if (dir != Vector3.zero) {
+                animator.ResetTrigger("StopRun");
+                animator.SetTrigger("OnRun");
+            }
             yspeed = 0;
             onGround = true;
         }

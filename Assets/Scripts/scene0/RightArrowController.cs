@@ -14,8 +14,8 @@ public class RightArrowController : MonoBehaviour {
         var trigger = player.GetComponent<PlayerNextSceneTrigger>();
         if (triggerMonitor.gameObject.activeSelf == false && trigger.canExit) {
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-            trigger.minExit = new Vector2(31, 2);
-            trigger.maxExit = new Vector2(32, 10);
+            trigger.minExit = new Vector2(41, 2);
+            trigger.maxExit = new Vector2(42, 10);
         }
 	}
 }

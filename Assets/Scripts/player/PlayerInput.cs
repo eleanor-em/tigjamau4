@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour {
     public float startupDelay = 5;
+    public GameObject particlePrefab;
+    private bool awake = false;
 
     new private SpriteRenderer renderer;
     private PlayerController controller;
@@ -31,6 +33,10 @@ public class PlayerInput : MonoBehaviour {
         if (Time.time < startupDelay) {
             return;
         }
+        if (!awake) {
+            awake = true;
+            Instantiate(particlePrefab).transform.SetParent(transform);
+        }
 
         bool wasMoving = controller.dir != Vector3.zero;
         // Handle general movement
@@ -43,14 +49,17 @@ public class PlayerInput : MonoBehaviour {
         } else {
             controller.dir = Vector3.zero;
             if (wasMoving) {
+                animator.ResetTrigger("OnRun");
                 animator.SetTrigger("StopRun");
             }
         }
         if (!wasMoving && controller.dir != Vector3.zero) {
+            animator.ResetTrigger("StopRun");
             animator.SetTrigger("OnRun");
         }
 
         if (JumpKeyDown() && controller.onGround) {
+            animator.ResetTrigger("StopJump");
             animator.SetTrigger("OnJump");
             controller.jumped = true;
         }
