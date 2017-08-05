@@ -7,17 +7,32 @@ public class PlayerInput : MonoBehaviour {
 
     new private SpriteRenderer renderer;
     private PlayerController controller;
+    private Animator animator;
     
 	void Start () {
+        animator = GetComponent<Animator>();
         renderer = GetComponent<SpriteRenderer>();
         controller = GetComponent<PlayerController>();
 	}
-	
-	void Update () {
+
+    private bool JumpKeyDown() {
+        return Input.GetKeyDown(KeyCode.Z)
+            || Input.GetKeyDown(KeyCode.Space)
+            || Input.GetKeyDown(KeyCode.UpArrow);
+    }
+
+    private bool JumpKey() {
+        return Input.GetKey(KeyCode.Z)
+            || Input.GetKey(KeyCode.Space)
+            || Input.GetKey(KeyCode.UpArrow);
+    }
+
+    void Update () {
         if (Time.time < startupDelay) {
             return;
         }
 
+        bool wasMoving = controller.dir != Vector3.zero;
         // Handle general movement
         if (Input.GetKey(KeyCode.RightArrow)) {
             controller.dir = Vector3.right;
@@ -27,12 +42,19 @@ public class PlayerInput : MonoBehaviour {
             renderer.flipX = true;
         } else {
             controller.dir = Vector3.zero;
+            if (wasMoving) {
+                animator.SetTrigger("StopRun");
+            }
+        }
+        if (!wasMoving && controller.dir != Vector3.zero) {
+            animator.SetTrigger("OnRun");
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && controller.onGround) {
+        if (JumpKeyDown() && controller.onGround) {
+            animator.SetTrigger("OnJump");
             controller.jumped = true;
         }
-        if (Input.GetKey(KeyCode.Z) && !controller.onGround) {
+        if (JumpKey() && !controller.onGround) {
             controller.holdJump = true;
         } else {
             controller.holdJump = false;

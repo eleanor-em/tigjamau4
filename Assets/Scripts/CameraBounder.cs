@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveCamera : MonoBehaviour {
+public class CameraBounder : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

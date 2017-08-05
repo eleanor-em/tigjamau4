@@ -11,7 +11,7 @@ public class PlayerCamera : MonoBehaviour {
         controller = GetComponent<PlayerController>();
     }
 
-    private void LateUpdate() {
+    private void Update() {
         float camYpos = Camera.main.transform.position.y - cameraOffset.y;
         float lerpAmount = 0.05f;
         if (controller.onGround) {

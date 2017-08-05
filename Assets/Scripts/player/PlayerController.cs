@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour {
     // Internally controlled status variables
     public bool onGround { get; private set; }
     private float yspeed = 0;
-    private Vector3 prevPos;
+    private Animator animator;
 
     private int horizScanCount = 10;
     private int vertScanCount = 5;
@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour {
         dir = Vector3.zero;
         jumped = false;
         onGround = false;
+
+        animator = GetComponent<Animator>();
     }
 
     void FixedUpdate() {
@@ -89,6 +91,7 @@ public class PlayerController : MonoBehaviour {
         })) {
             onGround = false;
         } else if (yspeed <= 0) {
+            animator.SetTrigger("StopJump");
             yspeed = 0;
             onGround = true;
         }
