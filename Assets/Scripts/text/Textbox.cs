@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,8 @@ public class Textbox : MonoBehaviour {
 
     private List<TextInfo> textsToShow;
     private TextInfo currentTextInfo;
+
+    private Action<GameObject> callback = null;
 
 	private void Setup() {
         textObject = Instantiate(textPrefab);
@@ -80,8 +83,16 @@ public class Textbox : MonoBehaviour {
         textsToShow.RemoveAt(0);
     }
 
+    public void SetText(List<TextInfo> textList, Action<GameObject> callback) {
+        this.callback = callback;
+        SetText(textList);
+    }
+
     private void OnClose() {
-        //textObject.transform.SetParent(null);
+        if (callback != null) {
+            callback(GameObject.Find("Player"));
+        }
+
         Destroy(textObject);
 
         if (textsToShow.Count > 0) {
@@ -89,6 +100,6 @@ public class Textbox : MonoBehaviour {
             newTextbox.GetComponent<Textbox>().SetText(textsToShow);
             newTextbox.transform.localPosition = transform.localPosition;
         }
-        gameObject.SetActive(false);
+        transform.gameObject.SetActive(false);
     }
 }

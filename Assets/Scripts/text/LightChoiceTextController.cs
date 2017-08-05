@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LightChoiceTextController : MonoBehaviour {
     public GameObject textboxPrefab;
+    public SceneAsset nextScene;
+    public GameObject arrow;
 
     void OnCollisionEnter2D(Collision2D other) {
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
@@ -38,7 +42,15 @@ public class LightChoiceTextController : MonoBehaviour {
                 offset = 2,
                 color = Color.white
             }
-        }));
+        }), obj => {
+            var trigger = obj.GetComponent<PlayerNextSceneTrigger>();
+            trigger.canExit = true;
+            trigger.nextScene = nextScene.name;
+        });
+
+        // the player has made their choice!
+        arrow.SetActive(false);
+        GameObject.Find("Player").GetComponent<PlayerNextSceneTrigger>().canExit = false;
         transform.gameObject.SetActive(false);
     }
 }
