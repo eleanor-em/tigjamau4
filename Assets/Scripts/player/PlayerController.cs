@@ -41,9 +41,14 @@ public class PlayerController : MonoBehaviour {
         grabbing = false;
 
         GameObject scroll = Instantiate(scrollPrefab);
-        scroll.GetComponent<Textbox>().SetText(new List<string>(new string [] {
-            "It was raining,\nand I was alone.",
-            "I decided to get up."
+        scroll.GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
+            new TextInfo {
+                text = "I am alone",
+                fadeInTime = 10,
+                lifetime = 3,
+                fadeOutTime = 1,
+                color = Color.white
+            }
         }));
     }
 
@@ -82,11 +87,13 @@ public class PlayerController : MonoBehaviour {
                 transform.position += xDelta;
                 CheckOnGround(MoveToContactY);
             } else if (!RaycastHorizRange(Vector3.up * (bounds.size.y - extents.y + grabStep), xDelta, distance)) {
-                // TODO: Find a better way to classify what constitutes an "edge".
-                prevPos = transform.position;
-                transform.position = hit.point;
-                grabbing = true;
-                yspeed = 0;
+                if (hit.collider.CompareTag("Platform")) {
+                    // TODO: Find a better way to classify what constitutes an "edge".
+                    prevPos = transform.position;
+                    transform.position = hit.point;
+                    grabbing = true;
+                    yspeed = 0;
+                }
             } else {
                 MoveToContactX(hit);
             }

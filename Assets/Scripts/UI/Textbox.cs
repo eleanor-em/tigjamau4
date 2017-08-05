@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public struct TextInfo {
+    public string text;
+    public float fadeInTime;
+    public float lifetime;
+    public float fadeOutTime;
+    public Color color;
+}
+
 public class Textbox : MonoBehaviour {
     public GameObject textPrefab;
     private GameObject textObject;
     private Text text;
+    private float timeOnScreen = 0;
+    private bool fadingOut = false;
 
-    private List<string> textsToShow;
+    private List<TextInfo> textsToShow;
+    private TextInfo currentTextInfo;
 
 	private void Setup() {
         textObject = Instantiate(textPrefab);
@@ -25,17 +36,34 @@ public class Textbox : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.X)) {
-            OnClose();
+        timeOnScreen += Time.deltaTime;
+        if (text.color.a < 1 && !fadingOut) {
+            currentTextInfo.color.a = Mathf.Min(timeOnScreen / currentTextInfo.fadeInTime, 1.0f);
+            text.color = currentTextInfo.color;
+        } else if (timeOnScreen - currentTextInfo.fadeInTime > currentTextInfo.lifetime) {
+            fadingOut = true;
+        }
+
+        if (fadingOut) {
+            // find out how long we've been fading for
+            float fadeTime = timeOnScreen - currentTextInfo.fadeInTime - currentTextInfo.lifetime;
+            currentTextInfo.color.a = Mathf.Max(1 - fadeTime / currentTextInfo.fadeOutTime, 0.0f);
+            text.color = currentTextInfo.color;
+            if (text.color.a == 0) {
+                OnClose();
+            }
         }
     }
 
-    public void SetText(List<string> textList) {
+    public void SetText(List<TextInfo> textList) {
         Setup();
 
         textsToShow = textList;
         // we're about to show the first element
-        text.text = textsToShow[0];
+        currentTextInfo = textsToShow[0];
+        currentTextInfo.color.a = 0;
+        text.text = currentTextInfo.text;
+        text.color = currentTextInfo.color;
         textsToShow.RemoveAt(0);
     }
 
