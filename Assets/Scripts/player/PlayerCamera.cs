@@ -22,7 +22,7 @@ public class PlayerCamera : MonoBehaviour {
             = new Vector3(transform.position.x, camYpos, -10)
             + cameraOffset;
         if (Camera.main.transform.position.x < 10) {
-            Camera.main.transform.position -= (Camera.main.transform.position.x - 10) * Vector3.right;
+            Camera.main.transform.position = new Vector3(10, camYpos, -10) + cameraOffset;
         }
     }
 }

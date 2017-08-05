@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour {
 
         var distance = yDelta.magnitude + (yspeed > 0 ? bounds.size.y - extents.y : extents.y);
         if (yspeed != 0 && !RaycastVertRange(yDelta, distance, MoveToContactY)) {
+            Debug.Log("moving " + yDelta);
             transform.position += yDelta;
         }
 
