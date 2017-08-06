@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dark1StartTextController : MonoBehaviour {
+public class Dark2StartTextController : MonoBehaviour {
     public GameObject textboxPrefab;
 
     void OnCollisionEnter2D(Collision2D other) {
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
             new TextInfo {
-                text = "Where am I?",
+                text = "Why am I here?",
                 fadeInDelay = 0,
                 fadeInTime = 1,
                 lifetime = 7,
@@ -16,12 +16,11 @@ public class Dark1StartTextController : MonoBehaviour {
                 offset = 0,
                 color = Color.white
             },
-            // monster text
             new TextInfo {
-                text = "It is a never changing",
+                text = "It is a two-sided mirror",
                 fadeInDelay = 1,
                 fadeInTime = 1,
-                lifetime = 10,
+                lifetime = 6,
                 fadeOutTime = 1,
                 offset = 0,
                 color = TextColors.MonsterCol
@@ -29,7 +28,7 @@ public class Dark1StartTextController : MonoBehaviour {
         }));
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
             new TextInfo {
-                text = "I know this place so well",
+                text = "Why am I always here?",
                 fadeInDelay = 2,
                 fadeInTime = 1,
                 lifetime = 5,
@@ -37,12 +36,11 @@ public class Dark1StartTextController : MonoBehaviour {
                 offset = 1,
                 color = Color.white
             },
-            // monster text
             new TextInfo {
-                text = "constant nothingness.",
+                text = "that you use as a shield",
                 fadeInDelay = 3,
                 fadeInTime = 1,
-                lifetime = 8,
+                lifetime = 4,
                 fadeOutTime = 1,
                 offset = 1,
                 color = TextColors.MonsterCol
@@ -50,7 +48,7 @@ public class Dark1StartTextController : MonoBehaviour {
         }));
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
             new TextInfo {
-                text = "but I understand nothing of it.",
+                text = "Why do I feel so alone",
                 fadeInDelay = 4,
                 fadeInTime = 1,
                 lifetime = 3,
@@ -58,39 +56,26 @@ public class Dark1StartTextController : MonoBehaviour {
                 offset = 2,
                 color = Color.white
             },
-            // monster text
             new TextInfo {
-                text = "It was designed,",
+                text = "and the light, it burns you.",
                 fadeInDelay = 5,
                 fadeInTime = 1,
-                lifetime = 6,
+                lifetime = 2,
                 fadeOutTime = 1,
                 offset = 2,
                 color = TextColors.MonsterCol
             }
         }));
+
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
-            // monster text
             new TextInfo {
-                text = "by you,",
-                fadeInDelay = 16,
+                text = "In someplace so familiar?",
+                fadeInDelay = 6,
                 fadeInTime = 1,
-                lifetime = 4,
+                lifetime = 1,
                 fadeOutTime = 1,
                 offset = 3,
-                color = TextColors.MonsterCol
-            }
-        }));
-        Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
-            // monster text
-            new TextInfo {
-                text = "to be this way.",
-                fadeInDelay = 18,
-                fadeInTime = 1,
-                lifetime = 2,
-                fadeOutTime = 1,
-                offset = 4,
-                color = TextColors.MonsterCol
+                color = Color.white
             }
         }));
         transform.gameObject.SetActive(false);
