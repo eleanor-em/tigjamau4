@@ -50,7 +50,7 @@ public class LightChoiceTextController : MonoBehaviour {
 
         // the player has made their choice!
         arrow.SetActive(false);
-        GameObject.Find("Player").GetComponent<PlayerNextSceneTrigger>().canExit = false;
+        GameObject.Find("[Prefab]Player").GetComponent<PlayerNextSceneTrigger>().canExit = false;
         transform.gameObject.SetActive(false);
     }
 }

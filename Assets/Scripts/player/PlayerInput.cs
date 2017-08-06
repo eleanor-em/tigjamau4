@@ -33,7 +33,7 @@ public class PlayerInput : MonoBehaviour {
         if (Time.time < startupDelay) {
             return;
         }
-        if (!awake) {
+        if (!awake && startupDelay > 0) {
             awake = true;
             Instantiate(particlePrefab).transform.SetParent(transform);
         }

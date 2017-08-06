@@ -90,7 +90,7 @@ public class Textbox : MonoBehaviour {
 
     private void OnClose() {
         if (callback != null) {
-            callback(GameObject.Find("Player"));
+            callback(GameObject.Find("[Prefab]Player"));
         }
 
         Destroy(textObject);
