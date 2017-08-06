@@ -69,7 +69,7 @@ public class Dark2StartTextController : MonoBehaviour {
 
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
             new TextInfo {
-                text = "In someplace so familiar?",
+                text = "in someplace so familiar?",
                 fadeInDelay = 6,
                 fadeInTime = 1,
                 lifetime = 1,

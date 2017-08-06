@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public static class TextColors {
-    public static Color MonsterCol = new Color(119f / 255, 28f / 255, 28f / 255);
+    public static Color MonsterCol = new Color(170f / 255, 39f / 255, 39f / 255);
 }
 
 public struct TextInfo {
