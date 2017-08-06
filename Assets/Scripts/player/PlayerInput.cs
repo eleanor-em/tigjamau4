@@ -7,7 +7,7 @@ public class PlayerInput : MonoBehaviour {
     public GameObject particlePrefab;
     private bool awake = false;
 
-    new private SpriteRenderer renderer;
+    private SpriteRenderer renderer;
     private PlayerController controller;
     private Animator animator;
     
