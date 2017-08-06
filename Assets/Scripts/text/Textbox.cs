@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public static class TextColors {
+    public static Color MonsterCol = new Color(119f / 255, 28f / 255, 28f / 255);
+}
+
 public struct TextInfo {
     public string text;
     public float fadeInDelay;
