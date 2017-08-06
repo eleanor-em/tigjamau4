@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class LightChoiceTextController : MonoBehaviour {
     public GameObject textboxPrefab;
-    public SceneAsset nextScene;
+    public string nextScene;
     public GameObject arrow;
 
     void OnCollisionEnter2D(Collision2D other) {
@@ -45,7 +45,7 @@ public class LightChoiceTextController : MonoBehaviour {
         }), obj => {
             var trigger = obj.GetComponent<PlayerNextSceneTrigger>();
             trigger.canExit = true;
-            trigger.nextScene = nextScene.name;
+            trigger.nextScene = nextScene;
         });
 
         // the player has made their choice!

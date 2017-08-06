@@ -8,7 +8,7 @@ public class ChoiceTextController : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D other) {
         Instantiate(textboxPrefab).GetComponent<Textbox>().SetText(new List<TextInfo>(new TextInfo[] {
             new TextInfo {
-                text = "I could continue through this darkness",
+                text = "I should continue through this darkness",
                 fadeInDelay = 0,
                 fadeInTime = 1,
                 lifetime = 7,

@@ -12,7 +12,9 @@ public class PlayerNextSceneTrigger : MonoBehaviour {
     void Update() {
         if (canExit && transform.position.x > minExit.x && transform.position.x < maxExit.x
             && transform.position.y > minExit.y && transform.position.y < maxExit.y) {
-            SceneManager.LoadScene(nextScene);
+            var fade = FindObjectOfType<FadeInController>();
+            fade.scene = nextScene;
+            fade.dir = 1;
         }
     }
 }
